@@ -33,7 +33,6 @@
   <!-- info section -->
     @include('home.footer')
   
-  <!-- end info section -->
 
 </body>
 
