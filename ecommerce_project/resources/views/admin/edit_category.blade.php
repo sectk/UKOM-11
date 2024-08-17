@@ -23,7 +23,7 @@
 
   </head>
   <body>
-    @include ('admin.css')
+    
 
     @include ('admin.header')
    
