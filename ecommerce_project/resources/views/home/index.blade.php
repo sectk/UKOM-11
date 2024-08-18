@@ -22,6 +22,8 @@
   
   @include('home.product')
  
+
+  
   <!-- end shop section -->
 
 
