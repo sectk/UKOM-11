@@ -92,7 +92,7 @@
               <label>Product category</label>
 
 
-        <select name="category" required>
+       <select name="category" required>
 
 
             <option>Select a Option</option>

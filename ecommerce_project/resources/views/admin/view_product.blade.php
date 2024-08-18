@@ -31,13 +31,13 @@
     {
         border: 1px solid skyblue;
         text-align: center;  
+        color: white;
     }
 
    </style>
 
   </head>
   <body>
-
     @include ('admin.header')
    
     @include ('admin.sidebar')
@@ -62,13 +62,18 @@
                     <th>Quantity</th>
 
                     <th>Image</th>
+
+                    <th>Edit</th>
+
+                    <th>Delete</th>
+
                 </tr>
 
                 @foreach($product as $products)
 
                 <tr>
                     <td>{{$products->title}}</td>
-                    <td>{{$products->description}}</td>
+                    <td>{!!Str::limit($products->description,50)!!}</td>
                     <td>{{$products->category}}</td>
                     <td>{{$products->price}}</td>
                     <td>{{$products->quantity}}</td>
@@ -76,15 +81,29 @@
 
                     <img height="120" width="120" src="products/{{$products->image}}">
 
+                    <td>
+                        <a class="btn btn-success" href="{{url('update_product',$products->id)}}">Edit</a>
+                    </td>
+
+                    <td>
+                        <a class="btn btn-danger" href="{{url('delete_product',$products->id)}}">Delete</a>
+                    </td>
+
                     </td>
                 </tr>
 
                 @endforeach
 
             </table>
-        </div>
+
+           
 
         </div>
+            <div class="div_deg">
+            {{$product->onEachSide(1)->links()}}
+            </div>
+        </div>
+
       </div>
     </div>
     @include ('admin.js')
