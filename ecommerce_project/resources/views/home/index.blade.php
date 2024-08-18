@@ -18,11 +18,30 @@
 
   <!-- shop section -->
 
+
+  
+  @include('home.product')
  
   <!-- end shop section -->
 
-    @include('home.product')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
   <!-- contact section -->
+   
    @include('home.contact')
 
 
@@ -32,7 +51,7 @@
 
   <!-- info section -->
     @include('home.footer')
-  
+   
 
 </body>
 
