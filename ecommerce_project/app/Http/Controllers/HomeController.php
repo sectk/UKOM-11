@@ -100,5 +100,35 @@ class HomeController extends Controller
         
     }
 
+    public function mycart()
+    {
+
+        if(Auth::id())
+        {
+            $user = Auth::user();
+
+            $userid = $user->id;
+            
+            $count = Cart::where('user_id',$userid)->count();
+
+            $cart = Cart::where('user_id',$userid)->get();
+
+
+
+
+        }
+
+        return view('home.mycart',compact('count','cart'));
+
+
+    }
+
+    public function delete_cart($id)
+    {
+        $data = Cart::find($id);
+        $data->delete();
+        return redirect()->back();
+    }
+
 
 }
