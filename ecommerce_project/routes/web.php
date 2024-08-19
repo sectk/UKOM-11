@@ -9,7 +9,7 @@ use App\Http\Controllers\AdminController;
 route::get('/',[HomeController::class,'home']);
 
 route::get('/dashboard',[HomeController::class,'login_home'])
-->middleware(['auth', 'verified'])->name('dashboard');
+->middleware(['auth', 'verified'])->name('dashboard');;
 
 
 Route::middleware('auth')->group(function () {

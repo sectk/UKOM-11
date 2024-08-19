@@ -45,12 +45,11 @@
 
                 @if (Route::has('login'))
 
-                
-
                 @auth
 
                 <a href="">
                     <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                    [{{$count}}]
                 </a>
             
 

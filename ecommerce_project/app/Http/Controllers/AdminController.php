@@ -25,7 +25,8 @@ class AdminController extends Controller
         $category->save();
 
         return redirect()->back()->with('success', 'Category added successfully!');
-
+        // toastr()->addSuccess('Category Added Successfully');
+        // return redirect()->back();
 
     }
     public function delete_category($id)

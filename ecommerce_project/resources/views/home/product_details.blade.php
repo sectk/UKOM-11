@@ -67,7 +67,7 @@
               
               <div class="detail-box">
                 <h6>Category : {{$data->category}}</h6>
-                <h6>Available QUantity
+                <h6>Available Quantity
                   <span>{{$data->quantity}}</span>
                 </h6>
               </div>
