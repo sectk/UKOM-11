@@ -5,11 +5,15 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Middleware\Admin;
 
 route::get('/',[HomeController::class,'home']);
 
 route::get('/dashboard',[HomeController::class,'login_home'])
-->middleware(['auth', 'verified'])->name('dashboard');;
+->middleware(['auth', 'verified'])->name('dashboard');
+
+route::get('/myorders',[HomeController::class,'myorders'])
+->middleware(['auth', 'verified']);
 
 
 Route::middleware('auth')->group(function () {
@@ -54,3 +58,21 @@ route::get('add_cart/{id}',[HomeController::class,'add_cart'])->middleware(['aut
 route::get('mycart',[HomeController::class,'mycart'])->middleware(['auth', 'verified']);
 
 route::get('delete_cart/{id}',[HomeController::class,'delete_cart'])->middleware(['auth','verified']);
+
+route::post('comfirm_order',[HomeController::class,'comfirm_order'])->middleware(['auth','verified']);
+
+route::get('shop',[HomeController::class,'shop']);
+
+route::get('why',[HomeController::class,'why']);
+
+route::get('testimonial',[HomeController::class,'testimonial']);
+
+route::get('contact',[HomeController::class,'contact']);
+
+route::get('view_orders',[AdminController::class,'view_order'])->middleware(['auth','admin']);
+
+route::get('on_the_way/{id}',[AdminController::class,'on_the_way'])->middleware(['auth','admin']);
+
+route::get('delivered/{id}',[AdminController::class,'delivered'])->middleware(['auth','admin']);
+
+route::get('print_pdf/{id}',[AdminController::class,'print_pdf'])->middleware(['auth','admin']);
