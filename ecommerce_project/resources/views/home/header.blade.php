@@ -58,7 +58,7 @@
 
           <a href="{{url('mycart')}}">
             <i class="fa fa-shopping-bag" aria-hidden="true"></i>
-            [{{ $count ?? 0 }}]
+            [{{ $count }}]
           </a>
 
 
