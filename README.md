@@ -4,7 +4,9 @@
 # CARA MEMBUKA WEB 
   nyalakan xampp
   <br>
-  punya database phpmyadmin
+  import file sql
+  <br>
+  punya database 'ecommerce' di phpmyadmin
   <br>
   'php artisan config:cache'
   <br>
