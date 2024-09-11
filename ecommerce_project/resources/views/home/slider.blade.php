@@ -16,13 +16,13 @@
                   <div class="col-md-7">
                     <div class="detail-box"> 
                       <h1>
-                        Welcome To Our <br>
-                        Gift Shop
+                       Welcome to <br>
+                       The 1000One Store 
                       </h1>
                       <p>
-                        Sequi perspiciatis nulla reiciendis, rem, tenetur impedit, eveniet non necessitatibus error distinctio mollitia suscipit. Nostrum fugit doloribus consequatur distinctio esse, possimus maiores aliquid repellat beatae cum, perspiciatis enim, accusantium perferendis.
+                      This is a one-stop shop that really helps you to find whatever your needs are easy.
                       </p>
-                      <a href="{{url('contact')}}">
+                      <a class = "na" href="{{url('contact')}}">
                         Contact Us
                       </a>
                     </div>

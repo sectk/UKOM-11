@@ -1,74 +1,105 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
     @include('home.css')
-    <style type="text/css">
-        .div_deg {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 60px;
+    <style>
+        .container {
+            margin: 60px auto;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+
+        .form-container {
+            margin-bottom: 30px;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .form-container input, 
+        .form-container textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-container input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .form-container input[type="submit"]:hover {
+            background-color: #0056b3;
         }
 
         table {
-            border: 2px solid black;
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
             text-align: center;
-            width: 800px;
+            padding: 10px;
         }
 
         th {
-            border: 2px solid black;
-            text-align: center;
+            background-color: #343a40;
             color: white;
-            font-size: 20px;
             font-weight: bold;
-            background-color: black;
         }
 
-        td {
-            border: 1px solid skyblue;
+        td img {
+            max-width: 150px;
+            height: auto;
         }
 
-        .cart_value {
-            text-align: center;
-            margin-bottom: 70px;
-            font-size: 20px;
-            font-weight: bold;
-            padding: 18px;
-        }
-
-        .order_deg {
-            padding-right: 100px;
-            margin-top: -50px;
-        }
-
-        label {
-            display: inline-block;
-            width: 150px;
-        }
-
-        .div_gap {
-            padding: 5px;
-        }
-
-        .custom-alert {
+        .alert {
             max-width: 400px;
-            /* Atur lebar maksimum sesuai kebutuhan */
-            margin: 0 auto;
-            /* Memusatkan alert secara horizontal */
+            margin: 20px auto;
+        }
+
+        .cart-summary {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .remove-btn {
+            color: #dc3545;
+            font-weight: bold;
+            text-decoration: none;
+            background-color: #f8d7da;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .remove-btn:hover {
+            background-color: #f5c6cb;
+            text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
     <div class="hero_area">
-        <!-- header section starts -->
         @include('home.header')
     </div>
 
     @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show custom-alert" role="alert">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -76,75 +107,77 @@
     </div>
     @endif
 
-
-    <div class="div_deg">
-
-        <div class="order_deg">
-            <form action="{{url('comfirm_order')}}" method="Post">
+    <div class="container">
+        <div class="form-container">
+            <form action="{{ url('comfirm_order') }}" method="POST">
                 @csrf
-                <div class="div_gap">
-                    <label>Receiver Name</label>
-
-                    <input type="text" name="name" value="{{Auth::user()->name}}">
+                <div class="form-group">
+                    <label for="name">Receiver Name</label>
+                    <input type="text" id="name" name="name" value="{{ Auth::user()->name }}" required>
                 </div>
 
-                <div class="div_gap">
-                    <label>Receiver Addres</label>
-
-                    <textarea name="address">{{Auth::user()->address}}</textarea>
+                <div class="form-group">
+                    <label for="address">Receiver Address</label>
+                    <textarea id="address" name="address" rows="4" required>{{ Auth::user()->address }}</textarea>
                 </div>
 
-                <div class="div_gap">
-                    <label>Receiver Phone</label>
-
-                    <input type="text" name="phone" value="{{Auth::user()->phone}}">
+                <div class="form-group">
+                    <label for="phone">Receiver Phone</label>
+                    <input type="text" id="phone" name="phone" value="{{ Auth::user()->phone }}" required>
                 </div>
 
-                <div class="div_gap">
-
-                    <input class="btn btn-primary" type="submit" value="Cash On Delivery">
+                <div class="form-group">
+                    <input type="submit" value="Cash On Delivery">
                 </div>
-
             </form>
         </div>
 
         <table>
-            <tr>
-                <th>Product Title</th>
-                <th>Price</th>
-                <th>Image</th>
-                <th>Remove</th>
-            </tr>
-
-            @php
-            $total = 0;
-            @endphp
-
-            @foreach ($cart as $item)
-            <tr>
-                <td>{{ $item->product->title }}</td>
-                <td>{{ number_format(floatval(str_replace('.', '', $item->product->price)), 0, ',', '.') }}</td>
-                <td>
-                    <img width="150" src="/products/{{ $item->product->image }}" alt="Product Image">
-                </td>
-
-                <td>
-                    <a class="btn btn-danger" href="{{ url('delete_cart', $item->id) }}">Remove</a>
-                </td>
-
+            <thead>
+                <tr>
+                    <th>Product Title</th>
+                    <th>Order Date</th>
+                    <th>Price</th>
+                    <th>Image</th>
+                    <th>Quantity</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody>
                 @php
-                // Menghapus titik dari harga dan mengkonversi ke float
-                $price = str_replace('.', '', $item->product->price);
-                $total += floatval($price);
+                $total = 0;
                 @endphp
-            </tr>
-            @endforeach
-        </table>
-    </div>
-    <p class="cart_value">Total Price: Rp{{ number_format($total, 0, ',', '.') }}</p>
 
-    <!-- info section -->
+                @foreach ($cart as $item)
+                <tr>
+                    <td>{{ $item->product->title }}</td>
+                    <td>{{ $item->created_at->format('Y-m-d') }}</td>
+                    <td>{{ number_format(floatval(str_replace('.', '', $item->product->price)) * $item->quantity, 0, ',', '.') }}</td>
+                    <td>
+                        <img src="/products/{{ $item->product->image }}" alt="{{ $item->product->title }}">
+                    </td>
+                    <td>
+                        <a href="{{ url('decrease_cart', $item->product_id) }}">-</a>
+                        {{ $item->quantity }}
+                        <a href="{{ url('add_cart', $item->product_id) }}">+</a>
+                    </td>
+                    <td>
+                        <a class="remove-btn" href="{{ url('delete_cart', $item->id) }}">Remove</a>
+                    </td>
+                    @php
+                    $price = str_replace('.', '', $item->product->price);
+                    $total += floatval($price) * $item->quantity;
+                    @endphp
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <div class="cart-summary">
+            Total Price: Rp{{ number_format($total, 0, ',', '.') }}
+        </div>
+    </div>
+
     @include('home.footer')
 </body>
-
 </html>

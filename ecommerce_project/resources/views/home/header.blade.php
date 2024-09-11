@@ -12,7 +12,7 @@
     <nav class="navbar navbar-expand-lg custom_nav-container ">
       <a class="navbar-brand" href="index.html">
         <span>
-          Giftos
+          1000One Store
         </span>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,7 @@
 
           <a href="{{url('mycart')}}">
             <i class="fa fa-shopping-bag" aria-hidden="true"></i>
-            [{{ $count }}]
+            [{{ $count ?? 0 }}]
           </a>
 
 

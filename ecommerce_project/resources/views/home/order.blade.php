@@ -48,7 +48,9 @@
             <table>
                 <tr>
                     <th>Product Name</th>
+                    <th>Order Date</th>
                     <th>Price</th>
+                    <th>Quantity</th>
                     <th>Delivered Status</th>
                     <th>Image</th>
                 </tr>
@@ -58,7 +60,9 @@
 
                 <tr>
                     <td>{{$order->product->title}}</td>
-                    <td>{{$order->product->price}}</td>
+                    <td>{{$order->created_at->format('Y-m-d') }}</td>
+                    <td>{{ number_format(floatval(str_replace('.', '', $order->product->price)) * $order->quantity, 0, ',', '.') }}</td>
+                    <td>{{$order->quantity}}</td>
                     <td>{{$order->status}}</td>
                     <td>
                         <img height="200" width="250" src="products/{{$order->product->image}}">

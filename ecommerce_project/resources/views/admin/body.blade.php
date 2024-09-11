@@ -64,6 +64,9 @@
                 </div>
               </div>
             </div>
+            <div class="check">
+              <h2>Pendapatan {{$total}}</h2>
+            </div>
           </div>
         </section>
        

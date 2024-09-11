@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Middleware\Admin;
 
 route::get('/', [HomeController::class, 'home']);
@@ -12,10 +13,17 @@ route::get('/', [HomeController::class, 'home']);
 route::get('/dashboard', [HomeController::class, 'login_home'])
     ->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('otp-form', function () {
+    return view('auth.otp-form');
+})->name('otp.form');
+
+Route::post('/verify-otp', [AuthenticatedSessionController::class, 'verifyOTP'])->name('verify.otp');
+
 route::get('/myorders', [HomeController::class, 'myorders'])
     ->middleware(['auth', 'verified']);
 
-route::middleware('auth')->group(function () {
+
+Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -53,6 +61,8 @@ route::get('product_search', [AdminController::class, 'product_search'])->middle
 route::get('product_details/{id}', [HomeController::class, 'product_details']);
 
 route::get('add_cart/{id}', [HomeController::class, 'add_cart'])->middleware(['auth', 'verified']);
+
+route::get('decrease_cart/{id}', [HomeController::class, 'decrease_cart'])->middleware(['auth', 'verified']);
 
 route::get('mycart', [HomeController::class, 'mycart'])->middleware(['auth', 'verified']);
 

@@ -21,7 +21,7 @@
         td {
             color: white;
             padding: 10px;
-            border: solid skyblue;
+            border: solid yellowgreen;
         }
 
         .table_center {
@@ -54,51 +54,55 @@
                     <table>
                         <tr>
                             <th>Customer name</th>
+                            <th>Order Date</th>
                             <th>Addres</th>
                             <th>Phone</th>
                             <th>Product title</th>
                             <th>Price</th>
                             <th>Image</th>
+                            <th>Quantity</th>
                             <th>Status</th>
                             <th>Change Status</th>
                             <th>Print</th>
                         </tr>
 
-                        @foreach ($data as $data)
+                        @foreach ($data as $order)
 
                         <tr>
-                            <td>{{$data->name}}</td>
-                            <td>{{$data->rec_address}}</td>
-                            <td>{{$data->phone}}</td>
-                            <td>{{$data->product->title}}</td>
-                            <td>{{$data->product->price}}</td>
+                            <td>{{$order->name}}</td>
+                            <td>{{$order->created_at->format('Y-m-d')}}</td>
+                            <td>{{$order->rec_address}}</td>
+                            <td>{{$order->phone}}</td>
+                            <td>{{$order->product->title}}</td>
+                            <td>{{ number_format(floatval(str_replace('.', '', $order->product->price)) * $order->quantity, 0, ',', '.') }}</td>
                             <td>
-                                <img width="150" src="products/{{$data->product->image}}">
+                                <img width="130" src="products/{{$order->product->image}}">
                             </td>
+                            <td>{{$order->quantity}}</td>
                             <td>
-                                @if($data->status == 'in progress')
+                                @if($order->status == 'in progress')
 
-                                <span style="color:red">{{$data->status}}</span>
+                                <span style="color:red">{{$order->status}}</span>
 
-                                @elseif($data->status == 'On the way')
+                                @elseif($order->status == 'On the way')
 
-                                <span style="color: skyblue;">{{$data->status}}</span>
+                                <span style="color: skyblue;">{{$order->status}}</span>
 
                                 @else
 
-                                <span style="color: yellow;">{{$data->status}}</span>
+                                <span style="color: yellow;">{{$order->status}}</span>
 
                                 @endif
 
 
                             </td>
                             <td>
-                                <a class="btn btn-primary" href="{{url('on_the_way',$data->id)}}">On the way</a>
-                                <a class="btn btn-success" href="{{url('delivered',$data->id)}}">Delivered</a>
+                                <a class="btn btn-primary" href="{{url('on_the_way',$order->id)}}">On the way</a>
+                                <a class="btn btn-success" href="{{url('delivered',$order->id)}}">Delivered</a>
                             </td>
 
                             <td>
-                                <a class="btn btn-secondary" href="{{url('print_pdf',$data->id)}}">Print PDF</a>
+                                <a class="btn btn-secondary" href="{{url('print_pdf',$order->id)}}">Print PDF</a>
                             </td>
 
 

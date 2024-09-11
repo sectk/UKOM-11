@@ -20,11 +20,28 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $user =  User::where('usertype','user')->get()->count();
+        $user =  User::where('usertype', 'user')->get()->count();
         $product = Product::all()->count();
         $order = Order::all()->count();
-        $deliverd = Order::where('status','Delivered')->get()->count();
-        return view('admin.index',compact('user','product','order','deliverd'));
+        $deliverd = Order::where('status', 'Delivered')->get()->count();
+
+        $orders = Order::all();
+        $products = [];
+
+        for ($i = 0; $i < sizeof($orders); $i++) {
+            $products[$i] = Product::where([['id', $orders[$i]->product_id]])->first();
+        }
+
+        $total = 0;
+
+        for ($i = 0; $i < sizeof($products); $i++) {
+            $temp = floatval(str_replace('.', '', $products[$i]->price)) * $orders[$i]->quantity; 
+            $total += $temp;
+        }
+
+        $total = number_format(doubleval(str_replace('.', '', $total)), 0, '.', '.');
+
+        return view('admin.index', compact('user', 'product', 'order', 'deliverd', 'total'));
     }
 
     public function home()
@@ -81,22 +98,58 @@ class HomeController extends Controller
         return view('home.product_details', compact('data', 'count'));
     }
 
-    public function add_cart($id)
+    public function decrease_cart($id)
     {
-        $product_id = $id;
         $user = Auth::user();
         $user_id = $user->id;
 
-        $data = new Cart;
+        // Check if the product is already in the cart
+        $cart = Cart::where('user_id', $user_id)
+            ->where('product_id', $id)
+            ->first();
 
-        $data->user_id = $user_id;
+        if ($cart) {
+            // Product is already in the cart, update quantity
 
-        $data->product_id = $product_id;
-
-        $data->save();
+            if ($cart->quantity == 1) {
+                // return url(`delete_cart/${$id}`);
+                // return url('delete_cart', $id);
+                $this->delete_cart($cart->id);
+            } else {
+                $cart->quantity -= 1;
+                $cart->save();
+            }
+        }
 
         return redirect()->back();
     }
+
+    public function add_cart($id)
+    {
+        $user = Auth::user();
+        $user_id = $user->id;
+
+        // Check if the product is already in the cart
+        $cart = Cart::where('user_id', $user_id)
+            ->where('product_id', $id)
+            ->first();
+
+        if ($cart) {
+            // Product is already in the cart, update quantity
+            $cart->quantity += 1;
+            $cart->save();
+        } else {
+            // Product is not in the cart, add new entry
+            $cart = new Cart;
+            $cart->user_id = $user_id;
+            $cart->product_id = $id;
+            $cart->quantity = 1; // Initial quantity
+            $cart->save();
+        }
+
+        return redirect()->back();
+    }
+
 
     public function mycart()
     {
@@ -109,9 +162,14 @@ class HomeController extends Controller
             $count = Cart::where('user_id', $userid)->count();
 
             $cart = Cart::where('user_id', $userid)->get();
+
+            $quantities = [];
+            for ($i = 0; $i < sizeof($cart); $i++) {
+                $quantities[$i] = $cart[$i]['quantity'];
+            }
         }
 
-        return view('home.mycart', compact('count', 'cart'));
+        return view('home.mycart', compact('count', 'cart', 'quantities'));
     }
 
     public function delete_cart($id)
@@ -126,42 +184,39 @@ class HomeController extends Controller
         $name = $request->name;
         $address = $request->address;
         $phone = $request->phone;
-
+    
         $userid = Auth::user()->id;
-
+    
         $cart = Cart::where('user_id', $userid)->get();
-
+    
         foreach ($cart as $carts) {
             $order = new Order;
             $order->name = $name;
             $order->rec_address = $address;
             $order->phone = $phone;
-
             $order->user_id = $userid;
             $order->product_id = $carts->product_id;
+            $order->quantity = $carts->quantity; // Include quantity here
             $order->save();
         }
-        $cart_remove = Cart::where('user_id',$userid)->get();
-        
-        foreach($cart_remove as $remove)
-        {
-            $data = Cart::find($remove->id);
-            $data->delete();
-        }
+    
+        // Clear cart after placing the order
+        Cart::where('user_id', $userid)->delete();
+    
         return redirect()->back()->with('success', 'Product ordered successfully!');
-
     }
+    
 
     public function myorders()
     {
 
         $user = Auth::user()->id;
 
-        $count = Cart::where('user_id',$user)->get()->count();
+        $count = Cart::where('user_id', $user)->get()->count();
 
-        $order = Order::where('user_id',$user)->get();
+        $order = Order::where('user_id', $user)->get();
 
-        return view('home.order',compact('count','order'));
+        return view('home.order', compact('count', 'order'));
     }
 
     public function shop()

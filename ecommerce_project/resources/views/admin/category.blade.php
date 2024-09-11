@@ -23,7 +23,7 @@
     {
       text-align: center;
       margin: auto;
-      border: 2px solid yellowgreen;
+      border: 2px skyblue;
       margin-top: 50px;
       width: 600px;
     }
@@ -41,7 +41,7 @@
     {
       color: white;
       padding: 10px;
-      border: 1px solid skyblue;
+      border: 1px solid yellowgreen;
     }
 
    </style>

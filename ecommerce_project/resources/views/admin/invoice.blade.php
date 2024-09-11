@@ -10,6 +10,7 @@
 
     <center>
         <h3>Customer name : {{$data->name}}</h3>
+        <h3>Order Date : {{$data->created_at->format('Y-m-d')}}</h3>
         <h3>Customer address : {{$data->rec_address}}</h3>
         <h3>Phone : {{$data->phone}}</h3>
         <h2>Product title : {{$data->product->title}}</h2>
